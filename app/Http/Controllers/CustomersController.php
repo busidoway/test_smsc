@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller
 {
@@ -11,7 +13,9 @@ class CustomersController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::select(DB::raw("id, name, phone, DATE_FORMAT(date, '%d.%m.%Y') as date"))->get();
+
+        return ['customers' => $customers];
     }
 
     /**
