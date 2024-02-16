@@ -57,7 +57,12 @@ const listMenu = ref([
         to: '/customers',
         title: 'Клиенты',
         icon: 'id-card'
-    }
+    },
+    {
+        to: '/sendsms',
+        title: 'Рассылки',
+        icon: 'mail-send'
+    },
 ])
 
 function toggleMenu(index) {

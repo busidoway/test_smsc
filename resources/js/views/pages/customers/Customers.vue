@@ -15,11 +15,11 @@
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr v-for="item in listCustomers">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.phone }}</td>
+                                <td>{{ item.date }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -30,5 +30,18 @@
 </template>
 
 <script setup>
+    import {ref, onMounted} from "vue";
+    import axios from "axios";
 
+    let listCustomers = ref([]);
+
+    onMounted(() => {
+        getCustomers();
+    })
+
+    function getCustomers() {
+        axios.get('/api/customers').then( resp => {
+            listCustomers.value = resp.data.customers;
+        })
+    }
 </script>
