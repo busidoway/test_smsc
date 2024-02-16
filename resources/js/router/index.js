@@ -6,6 +6,7 @@ const index = createRouter({
         { path: '/', component: () => import('@/views/pages/dashboard/Dashboard.vue') },
         { path: '/customers', component: () => import('@/views/pages/customers/Customers.vue') },
         { path: '/sendsms', component: () => import('@/views/pages/sendsms/Sendsms.vue') },
+        { path: '/sendsms/edit', component: () => import('@/views/pages/sendsms/SendsmsEdit.vue') },
     ]
 })
 

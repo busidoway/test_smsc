@@ -5,7 +5,7 @@
             <div class="d-flex justify-content-between align-items-center py-2">
                 <h5 class="card-header">Список рассылок</h5>
                 <div class="px-4">
-                    <a class="btn rounded-pill btn-outline-primary">Добавить</a>
+                    <RouterLink to="/sendsms/edit" class="btn rounded-pill btn-outline-primary">Добавить</RouterLink>
                 </div>
             </div>
             <div class="card-body">
