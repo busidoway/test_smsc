@@ -20,7 +20,7 @@
                         <div>{{ item.title }}</div>
                     </div>
                     <a v-else :href="href" @click="navigate" class="menu-link">
-                        <box-icon class="menu-icon" type="solid" :name="item.icon" color="#697a8d" size="1.25rem"></box-icon>
+                        <box-icon class="menu-icon" :type="item.typeIcon" :name="item.icon" color="#697a8d" size="1.25rem"></box-icon>
                         <div>{{ item.title }}</div>
                     </a>
                     <ul v-if="item.children" class="menu-sub">
@@ -50,7 +50,13 @@ const listMenu = ref([
     {
         to: '/',
         title: 'Дашборд',
-        icon: 'dashboard'
+        icon: 'dashboard',
+        typeIcon: 'solid'
+    },
+    {
+        to: '/customers',
+        title: 'Клиенты',
+        icon: 'id-card'
     }
 ])
 
