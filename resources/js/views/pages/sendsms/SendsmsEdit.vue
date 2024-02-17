@@ -14,7 +14,12 @@
                     </div>
                     <div class="mb-5">
                         <h5>Выберите получателей</h5>
-                        <div class=""></div>
+                        <div class="">
+                            <button type="button" class="btn btn-outline-primary btn-add-customer">
+                                <box-icon type='solid' name='user-plus' color="#696cff"></box-icon>
+                                <span class="ms-1">Добавить контакты</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="mb-5">
                         <h5>Запустите рассылку</h5>
@@ -51,6 +56,7 @@
 <script setup>
 import {ref, onMounted} from "vue";
 import axios from "axios";
+import 'boxicons';
 
 function sendSms() {
     // axios.post('/api/send_sms').then( resp => {
