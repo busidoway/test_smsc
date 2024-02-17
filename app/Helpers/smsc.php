@@ -1,4 +1,5 @@
 <?php
+// Функция отправки SMS
 if(!function_exists('send_sms')) {
     function send_sms($phones, $message, $translit = 0, $time = 0, $id = 0, $format = 0, $sender = false, $query = "", $files = array())
     {
@@ -30,6 +31,7 @@ if(!function_exists('send_sms_mail')) {
     }
 }
 
+// Функция получения стоимости SMS
 if(!function_exists('get_sms_cost')) {
     function get_sms_cost($phones, $message, $translit = 0, $format = 0, $sender = false, $query = "")
     {
@@ -52,6 +54,7 @@ if(!function_exists('get_sms_cost')) {
     }
 }
 
+// Функция проверки статуса отправленного SMS или HLR-запроса
 if(!function_exists('get_status')) {
     function get_status($id, $phone, $all = 0)
     {
@@ -80,6 +83,7 @@ if(!function_exists('get_status')) {
     }
 }
 
+// Функция получения баланса
 if(!function_exists('get_balance')) {
     function get_balance()
     {
@@ -96,6 +100,7 @@ if(!function_exists('get_balance')) {
     }
 }
 
+// Функция вызова запроса. Формирует URL и делает 5 попыток чтения через разные подключения к сервису
 if(!function_exists('_smsc_send_cmd')) {
     function _smsc_send_cmd($cmd, $arg = "", $files = array())
     {
@@ -129,6 +134,8 @@ if(!function_exists('_smsc_send_cmd')) {
     }
 }
 
+// Функция чтения URL. Для работы должно быть доступно:
+// curl или fsockopen (только http) или включена опция allow_url_fopen для file_get_contents
 if(!function_exists('_smsc_read_url')) {
     function _smsc_read_url($url, $files, $tm = 5)
     {

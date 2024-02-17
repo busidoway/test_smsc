@@ -62,4 +62,14 @@ class SendsmsController extends Controller
     {
         //
     }
+
+    public function sendSms(Request $request)
+    {
+        $phone = '+79655594878';
+        $mess = 'Hello!';
+
+        // $send = send_sms($phone, $mess);
+
+        // return ['smsc' => $send];
+    }
 }

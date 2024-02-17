@@ -5,12 +5,12 @@
             <div class="card-body">
                 <form action="">
                     <div class="mb-3">
-                        <label for="nameSendsms" class="form-label">Название</label>
-                        <input type="text" id="nameSendsms" class="form-control">
+                        <label for="name_sendsms" class="form-label">Название</label>
+                        <input type="text" id="name_sendsms" class="form-control">
                     </div>
                     <div class="mb-5">
-                        <label for="textSendsms" class="form-label">Текст</label>
-                        <textarea type="text" id="textSendsms" class="form-control" rows="10"></textarea>
+                        <label for="text_sendsms" class="form-label">Текст</label>
+                        <textarea type="text" id="text_sendsms" class="form-control" rows="10"></textarea>
                     </div>
                     <div class="mb-5">
                         <h5>Выберите получателей</h5>
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <button class="btn rounded-pill btn-primary">Сохранить</button>
+                        <button class="btn rounded-pill btn-primary" @click.once.prevent="sendSms">Сохранить</button>
                         <button class="btn rounded-pill btn-outline-secondary ms-4">Назад</button>
                     </div>
                 </form>
@@ -47,5 +47,14 @@
         </div>
     </div>
 </template>
+
 <script setup>
+import {ref, onMounted} from "vue";
+import axios from "axios";
+
+function sendSms() {
+    // axios.post('/api/send_sms').then( resp => {
+    //     console.log(resp.data);
+    // })
+}
 </script>
