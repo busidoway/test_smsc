@@ -44,7 +44,7 @@ import 'boxicons';
 
 let openMenu = ref(false);
 let indexMenu = ref(-1);
-const logo = ref('@/images/logo/daily-grow-icon.svg');
+const logo = ref('/images/logo/daily-grow-icon.svg');
 
 const listMenu = ref([
     {
