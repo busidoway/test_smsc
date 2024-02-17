@@ -24,8 +24,18 @@
                         <div class="mb-3">
                             <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_auto"><label for="r_send_auto" class="ms-2 form-check-label">Автоматически</label>
                         </div>
-                        <div class="mb-3">
-                            <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_regular"><label for="r_send_regular" class="ms-2 form-check-label">Регулярно</label>
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="">
+                                <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_regular"><label for="r_send_regular" class="ms-2 form-check-label">Регулярно</label>
+                            </div>
+                            <div class="d-flex ms-5">
+                                <select name="frequency" id="frequency" class="form-select form-select-sm">
+                                    <option value="daily" selected>Ежедневно</option>
+                                </select>
+                                <span class="ms-3">в</span>
+                                <input class="form-control form-control-sm ms-3" type="time" value="10:30:00" id="html5-time-input">
+
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3">
