@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sendsms;
+use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
 
 class SendsmsController extends Controller
 {
@@ -68,8 +70,12 @@ class SendsmsController extends Controller
         $phone = '+79655594878';
         $mess = 'Hello!';
 
+        $data = json_decode($request->check_customers);
+
+        $customers = Customer::whereIn('id', $data)->get();
+
         // $send = send_sms($phone, $mess);
 
-        // return ['smsc' => $send];
+        return ['smsc' => $customers];
     }
 }

@@ -4,7 +4,7 @@
             <form class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalCustomersTitle">Выбрать контакты</h5>
-                    <button type="button" class="btn-close" @click="$emit('closeModal', true)"></button>
+                    <button type="button" class="btn-close" @click="$emit('close-modal', true)"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive text-nowrap">
@@ -49,7 +49,7 @@ import axios from "axios";
 const props = defineProps({
 
 })
-const emits = defineEmits(['check-items']);
+const emits = defineEmits(['check-items', 'close-modal']);
 let listCustomers = ref([]);
 let checkItems = ref([]);
 
@@ -65,6 +65,7 @@ function getCustomers() {
 
 function passCheckItems() {
     emits('check-items', checkItems);
+    emits('close-modal', true);
 }
 
 function checkAllItem() {

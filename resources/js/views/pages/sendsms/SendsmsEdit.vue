@@ -39,7 +39,9 @@
                                 </select>
                                 <span class="ms-3">в</span>
                                 <input class="form-control form-control-sm ms-3" type="time" value="10:30:00" id="html5-time-input">
-
+                                <select name="template" id="template" class="form-select form-select-sm ms-3">
+                                    <option value="1" selected>За 7 дней до дня рождения</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -59,8 +61,11 @@ import {ref, onMounted} from "vue";
 import axios from "axios";
 import ModalCustomers from "@/views/pages/sendsms/components/ModalCustomers.vue";
 
+// vars
 const showModal = ref(false);
+let arrCustomers = ref([]);
 
+// functions
 function openModal() {
     return showModal.value = true;
 }
@@ -70,12 +75,17 @@ function closeModal() {
 }
 
 function getCheckItems(items) {
-    console.log(items.value)
+    arrCustomers = items.value;
 }
 
 function sendSms() {
-    // axios.post('/api/send_sms').then( resp => {
-    //     console.log(resp.data);
-    // })
+    const formData = new FormData();
+    const jsonData = JSON.stringify(arrCustomers);
+
+    formData.append('check_customers', jsonData);
+
+    axios.post('/api/send_sms', formData).then( resp => {
+        console.log(resp.data);
+    })
 }
 </script>
