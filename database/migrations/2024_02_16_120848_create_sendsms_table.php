@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('sendsms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('message');
             $table->tinyInteger('status')->default('1');
+            $table->dateTime('time');
             $table->timestamps();
         });
     }
