@@ -15,8 +15,8 @@
                     <div class="mb-5">
                         <h5>Выберите получателей</h5>
                         <div class="">
-                            <button type="button" class="btn btn-outline-primary btn-add-customer">
-                                <box-icon type='solid' name='user-plus' color="#696cff"></box-icon>
+                            <button type="button" class="btn btn-outline-primary btn-add-customer" @click.prevent="openModal">
+                                <i class='bx bxs-user-plus'></i>
                                 <span class="ms-1">Добавить контакты</span>
                             </button>
                         </div>
@@ -50,13 +50,28 @@
                 </form>
             </div>
         </div>
+        <ModalCustomers @close-modal="closeModal" @check-items="getCheckItems" v-if="showModal"></ModalCustomers>
     </div>
 </template>
 
 <script setup>
 import {ref, onMounted} from "vue";
 import axios from "axios";
-import 'boxicons';
+import ModalCustomers from "@/views/pages/sendsms/components/ModalCustomers.vue";
+
+const showModal = ref(false);
+
+function openModal() {
+    return showModal.value = true;
+}
+
+function closeModal() {
+    return showModal.value = false;
+}
+
+function getCheckItems(items) {
+    console.log(items.value)
+}
 
 function sendSms() {
     // axios.post('/api/send_sms').then( resp => {

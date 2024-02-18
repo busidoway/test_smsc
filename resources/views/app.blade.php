@@ -6,6 +6,7 @@
         <title>Daily Grow</title>
         <!-- Favicon -->
         <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/images/favicon/favicon.ico') }}" />
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         @vite(['resources/css/core.css'])
         @vite(['resources/css/theme-default.css'])
         @vite(['resources/css/app.css'])
