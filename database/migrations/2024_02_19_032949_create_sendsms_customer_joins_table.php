@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sendsms', function (Blueprint $table) {
+        Schema::create('sendsms_customer_joins', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('message');
-            $table->tinyInteger('status')->default('1');
-            $table->time('time')->nullable();
+            $table->foreignId('sendsms_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('customer_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sendsms');
+        Schema::dropIfExists('sendsms_customer_joins');
     }
 };
