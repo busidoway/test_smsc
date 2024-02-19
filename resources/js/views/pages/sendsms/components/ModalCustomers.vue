@@ -20,7 +20,7 @@
                             </thead>
                             <tbody class="table-border-bottom-0">
                             <tr v-for="item in listCustomers">
-                                <td><input type="checkbox" name="" :id="'c_id_'+item.id" class="form-check-input" :value="item.id" v-model="checkItems"></td>
+                                <td><input type="checkbox" name="" :id="'c_id_'+item.id" class="form-check-input" :value="{'id': item.id, 'name': item.name}" v-model="checkItems"></td>
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.phone }}</td>
@@ -43,12 +43,12 @@
 </template>
 
 <script setup>
-import {ref, onMounted, defineEmits} from "vue";
+import {ref, onMounted, defineEmits, defineProps} from "vue";
 import axios from "axios";
 
 const props = defineProps({
-
-})
+    arrCustomers: Object
+});
 const emits = defineEmits(['check-items', 'close-modal']);
 let listCustomers = ref([]);
 let checkItems = ref([]);
@@ -58,7 +58,17 @@ onMounted(() => {
 })
 
 function getCustomers() {
-    axios.get('/api/customers').then( resp => {
+    // console.log(props.arrCustomers)
+    let ArrCustomersData = [];
+    if(props.arrCustomers.length !== 0) ArrCustomersData = props.arrCustomers;
+
+    const formData = new FormData();
+    const jsonData = JSON.stringify(ArrCustomersData);
+
+    formData.append('data', jsonData);
+
+    axios.post('/api/customers', formData).then( resp => {
+        console.log(resp.data)
         listCustomers.value = resp.data.customers;
     })
 }

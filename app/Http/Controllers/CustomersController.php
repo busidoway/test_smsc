@@ -11,9 +11,25 @@ class CustomersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::select(DB::raw("id, name, phone, DATE_FORMAT(date, '%d.%m.%Y') as date"))->get();
+        $customers_not_in = [];
+
+        $data = json_decode($request->data);
+
+        if(!empty($data)){
+            foreach($data as $item){
+                $customers_not_in[] = $item->id;
+            }
+        }
+
+        $customers = Customer::select(DB::raw("id, name, phone, DATE_FORMAT(date, '%d.%m.%Y') as date"))->whereNotIn('id', $customers_not_in)->get();
+
+        // if(!empty($request->data)){
+        //
+        // }else{
+        //
+        // }
 
         return ['customers' => $customers];
     }
