@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('customers', [CustomersController::class, 'index']);
 
+Route::post('sendsms', [SendsmsController::class, 'index']);
+
 Route::post('send_sms', [SendsmsController::class, 'sendSms']);
 
 Route::post('sendsms_store', [SendsmsController::class, 'store']);

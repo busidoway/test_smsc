@@ -30,16 +30,12 @@
                     <div class="mb-5">
                         <h5>Запустите рассылку</h5>
                         <div class="mb-3">
-                            <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_now" value="1" v-model="typeSendsms">
+                            <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_now" value="now" v-model="typeSendsms">
                             <label for="r_send_now" class="ms-2 form-check-label">Отправить сейчас</label>
-                        </div>
-                        <div class="mb-3">
-                            <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_auto" value="2" v-model="typeSendsms">
-                            <label for="r_send_auto" class="ms-2 form-check-label">Автоматически</label>
                         </div>
                         <div class="mb-3 d-flex align-items-center">
                             <div class="">
-                                <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_regular" value="2" v-model="typeSendsms">
+                                <input type="radio" name="type_sendsms" class="form-check-input" id="r_send_regular" value="reg" v-model="typeSendsms">
                                 <label for="r_send_regular" class="ms-2 form-check-label">Регулярно</label>
                             </div>
                             <div class="d-flex ms-5">
@@ -49,14 +45,16 @@
                                 <span class="ms-3">в</span>
                                 <input class="form-control form-control-sm ms-3" type="time" value="10:30:00" v-model="timeSendsms" id="html5-time-input">
                                 <select name="template" id="template" class="form-select form-select-sm ms-3">
-                                    <option value="1" selected>За 7 дней до дня рождения</option>
+                                    <option value="1" selected>За N дней до дня рождения</option>
                                 </select>
+                                <span class="ms-3 d-inline me-2">дней:</span>
+                                <input type="number" v-model="countDays" class="form-control form-control-sm" min="0" value="0" style="width: 60px;">
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <button class="btn rounded-pill btn-primary" @click.prevent="sendSms">Сохранить</button>
-                        <button class="btn rounded-pill btn-outline-secondary ms-4">Назад</button>
+                        <RouterLink to="/sendsms" class="btn rounded-pill btn-outline-secondary ms-4">Назад</RouterLink>
                     </div>
                 </form>
             </div>
@@ -70,15 +68,21 @@ import {ref, onMounted} from "vue";
 import axios from "axios";
 import ModalCustomers from "@/views/pages/sendsms/components/ModalCustomers.vue";
 
-// vars
+// data
 const showModal = ref(false);
 let arrCustomers = ref([]);
 const nameSendsms = ref('');
 const messSendsms = ref('');
 const typeSendsms = ref('');
 const timeSendsms = ref('00:00');
+const countDays = ref(0);
 
-// functions
+// mounted
+onMounted(() => {
+    typeSendsms.value = 'now';
+})
+
+// methods
 function openModal() {
     return showModal.value = true;
 }
@@ -103,7 +107,8 @@ function sendSms() {
         message: messSendsms.value,
         time: timeSendsms.value,
         customers: arrCustomersData,
-        type: typeSendsms.value
+        type: typeSendsms.value,
+        count_days: countDays.value
     });
 
     formData.append('data', jsonData);
@@ -111,9 +116,5 @@ function sendSms() {
     axios.post('/api/sendsms_store', formData).then( resp => {
         console.log(resp.data);
     })
-
-    // axios.post('/api/send_sms', formData).then( resp => {
-    //     console.log(resp.data);
-    // })
 }
 </script>

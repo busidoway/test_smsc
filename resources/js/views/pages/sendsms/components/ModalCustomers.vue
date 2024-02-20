@@ -28,6 +28,11 @@
                             </tr>
                             </tbody>
                         </table>
+                        <div class="spinner-wrap d-flex justify-content-center py-3" v-if="loading">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -46,19 +51,22 @@
 import {ref, onMounted, defineEmits, defineProps} from "vue";
 import axios from "axios";
 
+// data
 const props = defineProps({
     arrCustomers: Object
 });
 const emits = defineEmits(['check-items', 'close-modal']);
 let listCustomers = ref([]);
 let checkItems = ref([]);
+const loading = ref(true);
 
+// mounted
 onMounted(() => {
     getCustomers();
 })
 
+// methods
 function getCustomers() {
-    // console.log(props.arrCustomers)
     let ArrCustomersData = [];
     if(props.arrCustomers.length !== 0) ArrCustomersData = props.arrCustomers;
 
@@ -68,7 +76,7 @@ function getCustomers() {
     formData.append('data', jsonData);
 
     axios.post('/api/customers', formData).then( resp => {
-        console.log(resp.data)
+        loading.value = false;
         listCustomers.value = resp.data.customers;
     })
 }

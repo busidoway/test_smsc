@@ -23,6 +23,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="spinner-wrap d-flex justify-content-center py-3" v-if="loading">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -33,14 +38,19 @@
     import {ref, onMounted} from "vue";
     import axios from "axios";
 
+    // data
     let listCustomers = ref([]);
+    const loading = ref(true);
 
+    // mounted
     onMounted(() => {
         getCustomers();
     })
 
+    // methods
     function getCustomers() {
-        axios.get('/api/customers').then( resp => {
+        axios.post('/api/customers').then( resp => {
+            loading.value = false;
             listCustomers.value = resp.data.customers;
         })
     }

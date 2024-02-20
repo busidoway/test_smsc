@@ -25,12 +25,6 @@ class CustomersController extends Controller
 
         $customers = Customer::select(DB::raw("id, name, phone, DATE_FORMAT(date, '%d.%m.%Y') as date"))->whereNotIn('id', $customers_not_in)->get();
 
-        // if(!empty($request->data)){
-        //
-        // }else{
-        //
-        // }
-
         return ['customers' => $customers];
     }
 
