@@ -7,6 +7,9 @@ const index = createRouter({
         { path: '/customers', component: () => import('@/views/pages/customers/Customers.vue') },
         { path: '/sendsms', component: () => import('@/views/pages/sendsms/Sendsms.vue') },
         { path: '/sendsms/edit', component: () => import('@/views/pages/sendsms/SendsmsEdit.vue') },
+        { path: '/sendsms/edit/:id', component: () => import('@/views/pages/sendsms/SendsmsEdit.vue') },
+        { path: '/customers/edit', component: () => import('@/views/pages/customers/CustomersEdit.vue') },
+        { path: '/customers/edit/:id', component: () => import('@/views/pages/customers/CustomersEdit.vue') },
     ]
 })
 

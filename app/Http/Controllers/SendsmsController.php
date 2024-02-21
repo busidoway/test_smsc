@@ -56,21 +56,21 @@ class SendsmsController extends Controller
                 }
 
                 if($status[0] == 1){
-                    if(isset($date_from) && $status[3] >= $date_from) {
-                        $count_delivered++;
-                    }elseif(isset($date_to) && $status[3] <= $date_to){
-                        $count_delivered++;
-                    }elseif((isset($date_from) && isset($date_to)) && ($status[3] >= $date_from && $status[3] <= $date_to)){
-                        $count_delivered++;
-                    }
-                    // else{
+                    // if(isset($date_from) && $status[3] >= $date_from) {
                     //     $count_delivered++;
+                    // }elseif(isset($date_to) && $status[3] <= $date_to){
+                    //     $count_delivered++;
+                    // }elseif((isset($date_from) && isset($date_to)) && ($status[3] >= $date_from && $status[3] <= $date_to)){
+                    //     $count_delivered++;
+                    // }
+                    // else{
+                        $count_delivered++;
                     // }
                 }elseif($status[0] == -1){
                     $count_wait++;
                 }
 
-                // $status_arr[] = $status;
+                $status_arr[] = $status;
                 // dd($status[2]);
                 // $status1 = (string)$status[1];
 
@@ -82,7 +82,7 @@ class SendsmsController extends Controller
                 'delivered' => $count_delivered,
                 'wait' => $count_wait,
                 // 'date_send' => $date_send,
-                // 'status' => $status_arr
+                'status' => $status_arr
             ];
         }
 
@@ -135,7 +135,8 @@ class SendsmsController extends Controller
         $sendsms = Sendsms::create([
             "name" => $data->name,
             "message" => $data->message,
-            "time" => $data->time
+            "time" => $data->time,
+            "count_days" => $data->count_days
         ]);
 
         $data_customers_id = [];
@@ -185,17 +186,7 @@ class SendsmsController extends Controller
 
         }
 
-        // $phones = implode(",", $data_phones);
-        // if(isset($sendsms->message)) $message = $sendsms->message;
-        //
-        // if(isset($sendsms->time)){
-        //     $time = $sendsms->time;
-        //     $time_params = date('d.m.Y '.$time, strtotime('+7 days'));
-        // }
-
-
-
-        return ['sendsms' => $sendsms, 'send_log' => $send_log];
+        return ['sendsms' => $sendsms, 'status' => 'success', 'send_log' => $send_log];
 
     }
 
@@ -212,7 +203,15 @@ class SendsmsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $sendsms = Sendsms::find($id);
+
+        $customers = DB::table('customers')
+            ->select('*')
+            ->join('sendsms_customer_joins as scj', 'scj.customer_id', '=', 'customers.id')
+            ->where('scj.sendsms_id', $id)
+            ->get();
+
+        return ['sendsms' => $sendsms, 'customers' => $customers];
     }
 
     /**
@@ -220,7 +219,20 @@ class SendsmsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $sendsms = Sendsms::find($id);
+
+        $data = json_decode($request->data);
+
+        $sendsms->name = $data->name;
+        $sendsms->message = $data->message;
+        $sendsms->time = $data->time;
+        $sendsms->count_days = $data->count_days;
+
+        if($sendsms->isDirty()){
+            $sendsms->save();
+        }
+
+        return ['sendsms' => $sendsms, 'status' => 'success'];
     }
 
     /**

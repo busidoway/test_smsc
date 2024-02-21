@@ -13,6 +13,7 @@ class Sendsms extends Model
         'name',
         'message',
         'time',
-        'status'
+        'status',
+        'count_days'
     ];
 }

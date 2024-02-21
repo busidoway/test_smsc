@@ -1,6 +1,11 @@
 <template>
     <div class="sendsms-edit">
-        <h4 class="py-3 mb-4">Создать рассылку</h4>
+        <div class="py-3 mb-4 d-flex align-items-center">
+            <h4 class="m-0" v-if="editMode">Редактирование</h4>
+            <h4 class="m-0" v-else>Создать рассылку</h4>
+            <div class="badge bg-label-success mt-2 ms-3" v-if="badge.success">Успешно сохранено</div>
+            <div class="badge bg-label-danger mt-2 ms-3" v-if="badge.error">Ошибка</div>
+        </div>
         <div class="card">
             <div class="card-body">
                 <form action="" method="post">
@@ -53,7 +58,8 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <button class="btn rounded-pill btn-primary" @click.prevent="sendSms">Сохранить</button>
+                        <button class="btn rounded-pill btn-primary" @click.prevent="update(route.params.id)" v-if="editMode">Сохранить</button>
+                        <button class="btn rounded-pill btn-primary" @click.prevent="sendSms" v-else>Сохранить</button>
                         <RouterLink to="/sendsms" class="btn rounded-pill btn-outline-secondary ms-4">Назад</RouterLink>
                     </div>
                 </form>
@@ -65,10 +71,13 @@
 
 <script setup>
 import {ref, onMounted} from "vue";
+import { useRoute, useRouter } from 'vue-router';
 import axios from "axios";
 import ModalCustomers from "@/views/pages/sendsms/components/ModalCustomers.vue";
 
 // data
+const route = useRoute();
+const router = useRouter();
 const showModal = ref(false);
 let arrCustomers = ref([]);
 const nameSendsms = ref('');
@@ -76,10 +85,16 @@ const messSendsms = ref('');
 const typeSendsms = ref('');
 const timeSendsms = ref('00:00');
 const countDays = ref(0);
+const editMode = ref(false);
+const badge = ref({
+    success: false,
+    error: false
+});
 
 // mounted
 onMounted(() => {
     typeSendsms.value = 'now';
+    edit(route.params.id);
 })
 
 // methods
@@ -114,7 +129,64 @@ function sendSms() {
     formData.append('data', jsonData);
 
     axios.post('/api/sendsms_store', formData).then( resp => {
-        console.log(resp.data);
+        if(resp.data.status === 'success'){
+            badge.value.error = false;
+            badge.value.success = true;
+            router.push('/sendsms/edit/' + resp.data.sendsms.id);
+        }else if(resp.data.status === 'error'){
+            badge.value.success = false;
+            badge.value.error = true;
+        }
     })
+}
+
+function edit(id){
+    if(id) {
+        axios.get('/api/sendsms_edit/' + id).then( resp => {
+            if(resp.data.sendsms.length !== 0){
+                nameSendsms.value = resp.data.sendsms.name;
+                messSendsms.value = resp.data.sendsms.message;
+                timeSendsms.value = resp.data.sendsms.time;
+                countDays.value = resp.data.sendsms.count_days;
+
+                if(timeSendsms.value && countDays.value)
+                    typeSendsms.value = 'reg';
+
+                editMode.value = true;
+            }
+            if(resp.data.customers.length !== 0){
+                arrCustomers.value = resp.data.customers;
+            }
+        })
+    }
+}
+
+function update(id) {
+    if(id) {
+        let arrCustomersData = [];
+        if (!arrCustomers.value) arrCustomersData = arrCustomers;
+
+        const formData = new FormData();
+        const jsonData = JSON.stringify({
+            name: nameSendsms.value,
+            message: messSendsms.value,
+            time: timeSendsms.value,
+            customers: arrCustomersData,
+            type: typeSendsms.value,
+            count_days: countDays.value
+        });
+
+        formData.append('data', jsonData);
+
+        axios.post('/api/sendsms_update/' + id, formData).then(resp => {
+            if (resp.data.status === 'success') {
+                badge.value.error = false;
+                badge.value.success = true;
+            } else if (resp.data.status === 'error') {
+                badge.value.success = false;
+                badge.value.error = true;
+            }
+        })
+    }
 }
 </script>

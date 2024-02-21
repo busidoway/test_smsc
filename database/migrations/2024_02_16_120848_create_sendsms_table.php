@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('message');
             $table->tinyInteger('status')->default('1');
             $table->time('time')->nullable();
+            $table->integer('count_days')->nullable();
             $table->timestamps();
         });
     }

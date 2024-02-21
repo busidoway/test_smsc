@@ -41,7 +41,20 @@ class CustomersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = json_decode($request->data);
+
+        if($data){
+            $customer = Customer::create([
+                "name" => $data->name,
+                "phone" => $data->phone,
+                "date" => date('Y-m-d', strtotime($data->date))
+            ]);
+
+            return ['customer' => $customer, 'status' => 'success'];
+        }
+
+        return ['status'=> 'undefined'];
+
     }
 
     /**
@@ -57,7 +70,9 @@ class CustomersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $customer = Customer::find($id);
+
+        return ['customer' => $customer];
     }
 
     /**
@@ -65,7 +80,20 @@ class CustomersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $customer = Customer::find($id);
+
+        $data = json_decode($request->data);
+
+        $customer->name = $data->name;
+        $customer->phone = $data->phone;
+        $customer->date = $data->date;
+
+        if($customer->isDirty()){
+            $customer->save();
+        }
+
+        return ['customer' => $customer, 'status' => 'success'];
+
     }
 
     /**
@@ -73,6 +101,12 @@ class CustomersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $customer = Customer::find($id);
+        if($customer) {
+            $customer->delete();
+            return ["status" => "success"];
+        }else{
+            return ["status" => "error"];
+        }
     }
 }
