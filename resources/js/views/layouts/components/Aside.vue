@@ -48,7 +48,7 @@ const logo = ref('/images/logo/daily-grow-icon.svg');
 
 const listMenu = ref([
     {
-        to: '/',
+        to: '/dashboard',
         title: 'Дашборд',
         icon: 'dashboard',
         typeIcon: 'solid'
