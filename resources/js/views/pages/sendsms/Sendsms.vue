@@ -11,7 +11,7 @@
             <div class="card-body">
                 <div class="row mb-4">
                     <div class="col-sm-6 col-md-2 d-flex align-items-center">
-                        <span>Дата</span><span class="ms-1 me-2">с</span><input type="date" class="form-control" v-model="dateFrom">
+                        <span>Период</span><span class="ms-1 me-2">с</span><input type="date" class="form-control" v-model="dateFrom">
                     </div>
                     <div class="col-sm-6 col-md-2 d-flex align-items-center">
                         <span class="me-2">по</span><input type="date" class="form-control" v-model="dateTo">
@@ -81,7 +81,7 @@ onMounted(() => {
 })
 
 // watch
-watch(dateFrom,async (newDateFrom) => {
+watch(dateFrom, (newDateFrom) => {
 
     let dateToVal = '';
     if(dateTo.value) dateToVal = dateTo.value;
@@ -92,8 +92,32 @@ watch(dateFrom,async (newDateFrom) => {
         date_to: dateToVal
     });
     formData.append('data', jsonData);
+
+    loading.value = true;
+    listSendsms.value = [];
+
     axios.post('/api/sendsms', formData).then( resp => {
-        console.log(resp.data);
+        loading.value = false;
+        listSendsms.value = resp.data.sendsms;
+    })
+})
+
+watch(dateTo, (newDateTo) => {
+    let dateFromVal = '';
+    if(dateFrom.value) dateFromVal = dateFrom.value;
+
+    const formData = new FormData();
+    const jsonData = JSON.stringify({
+        date_from: dateFromVal,
+        date_to: newDateTo
+    });
+    formData.append('data', jsonData);
+
+    loading.value = true;
+    listSendsms.value = [];
+
+    axios.post('/api/sendsms', formData).then( resp => {
+        loading.value = false;
         listSendsms.value = resp.data.sendsms;
     })
 })
@@ -101,10 +125,19 @@ watch(dateFrom,async (newDateFrom) => {
 // methods
 function getSendsms() {
     axios.post('/api/sendsms').then( resp => {
-        console.log(resp.data);
         loading.value = false;
         listSendsms.value = resp.data.sendsms;
     })
 }
 
+function deleteItem(id) {
+    if(id){
+        axios.post('/api/sendsms_delete/' + id).then( resp => {
+            if(resp.data.status === 'success'){
+                loading.value = true;
+                getSendsms();
+            }
+        })
+    }
+}
 </script>

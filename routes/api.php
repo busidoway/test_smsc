@@ -32,10 +32,12 @@ Route::post('customers_delete/{id}', [CustomersController::class, 'destroy']);
 
 Route::post('sendsms', [SendsmsController::class, 'index']);
 
-Route::post('send_sms', [SendsmsController::class, 'sendSms']);
+// Route::post('send_sms', [SendsmsController::class, 'sendSms']);
 
 Route::post('sendsms_store', [SendsmsController::class, 'store']);
 
 Route::get('sendsms_edit/{id}', [SendsmsController::class, 'edit']);
 
 Route::post('sendsms_update/{id}', [SendsmsController::class, 'update']);
+
+Route::post('sendsms_delete/{id}', [SendsmsController::class, 'destroy']);

@@ -25,20 +25,16 @@ class SendsmsController extends Controller
         $sendsms_arr = [];
         $data_req = json_decode($request->data);
 
-        // return ['data' => $data_req];
-
-        if(isset($data_req->date_from) && !empty($data_req->date_from)) $date_from = strtotime($data_req->date_from);
-        if(isset($data_req->date_to) && !empty($data_req->date_to)) $date_to = strtotime($data_req->date);
+        if(!isset($data_req->date_from) && !empty($data_req->date_from)) $date_from = strtotime($data_req->date_from);
+        if(isset($data_req->date_to) && !empty($data_req->date_to)) $date_to = strtotime($data_req->date_to);
 
         foreach($sendsms as $item){
             $sendsms_stat = SendsmsStat::select('sms_id')->where('sendsms_id', $item->id)->get();
             $count_delivered = 0;
             $count_wait = 0;
             $status_arr = [];
-            $date_send = '';
+            $date_send = [];
             foreach($sendsms_stat as $stat){
-                // $sendsms_customer_join = SendsmsCustomerJoin::select('')
-                // $stat_phone = Customer::select('phone')->where('id', $stat->sms_id)->first();
 
                 $stat_phone = DB::table('customers')
                     ->select('phone')
@@ -48,31 +44,35 @@ class SendsmsController extends Controller
 
                 $status = get_status($stat->sms_id, $stat_phone->phone, 1);
 
-                if($status[0] == 1 || $status[0] == -1){
-                    // $date_send = date('d.m.y H:i:s', $status[3]);
-                    if(isset($date_from) && $date_from > $status[3]){
-
+                if($status[0] == 1){
+                    if(isset($date_from) || isset($date_to)) {
+                        if (isset($date_from) && $status[3] >= $date_from && !isset($date_to)) {
+                            $count_delivered++;
+                        } elseif (isset($date_to) && $status[3] <= $date_to && !isset($date_from)) {
+                            $count_delivered++;
+                        } elseif ((isset($date_from) && isset($date_to)) && ($status[3] >= $date_from && $status[3] <= $date_to)) {
+                            $count_delivered++;
+                        }
+                    }
+                    else{
+                        $count_delivered++;
+                    }
+                }elseif($status[0] == -1){
+                    if(isset($date_from) || isset($date_to)) {
+                        if (isset($date_from) && $status[3] >= $date_from && !isset($date_to)) {
+                            $count_wait++;
+                        } elseif (isset($date_to) && $status[3] <= $date_to && !isset($date_from)) {
+                            $count_wait++;
+                        } elseif ((isset($date_from) && isset($date_to)) && ($status[3] >= $date_from && $status[3] <= $date_to)) {
+                            $count_wait++;
+                        }
+                    }
+                    else{
+                        $count_wait++;
                     }
                 }
 
-                if($status[0] == 1){
-                    // if(isset($date_from) && $status[3] >= $date_from) {
-                    //     $count_delivered++;
-                    // }elseif(isset($date_to) && $status[3] <= $date_to){
-                    //     $count_delivered++;
-                    // }elseif((isset($date_from) && isset($date_to)) && ($status[3] >= $date_from && $status[3] <= $date_to)){
-                    //     $count_delivered++;
-                    // }
-                    // else{
-                        $count_delivered++;
-                    // }
-                }elseif($status[0] == -1){
-                    $count_wait++;
-                }
-
                 $status_arr[] = $status;
-                // dd($status[2]);
-                // $status1 = (string)$status[1];
 
             }
 
@@ -85,22 +85,6 @@ class SendsmsController extends Controller
                 'status' => $status_arr
             ];
         }
-
-        // $sendsms_stat = DB::table('sendsms_stats')->select('sms_id')->where('sendsms_id', 45)->get();
-        // $new_arr = [];
-        // $arr_phones = [];
-        // foreach($sendsms_stat as $item){
-        //     $new_arr[] = $item->sms_id;
-        //     $arr_phones[] = Customer::select('phone')->where('id', $item->sms_id)->first();
-        // }
-        //
-        // // $ddd = (Array)$sendsms_stat;
-        // $ddd = array_values(json_decode(json_encode ( $sendsms_stat ) , true));
-        // $sms_id_stat = implode(',', $new_arr);
-        // $phones = implode(',', $arr_phones);
-
-        // $status = get_status($sms_id_stat, $phones, 1);
-
 
         return ['sendsms' => $sendsms_arr];
     }
@@ -120,14 +104,11 @@ class SendsmsController extends Controller
     {
 
         date_default_timezone_set("Europe/Moscow");
-        $curr_date = date('Y-m-d H:i:s');
 
         $data = json_decode($request->data);
 
-        // return ['type' => $data->type];
-
         if(empty($data->name) && empty($data->message)){
-            return ['error' => 'Поля "Название" и "Текст" обязательны'];
+            return ['status' => 'error', 'info' => 'Поля "Название" и "Текст" обязательны'];
         }
 
         // return ['sendsms' => $data->customers];
@@ -139,54 +120,26 @@ class SendsmsController extends Controller
             "count_days" => $data->count_days
         ]);
 
-        $data_customers_id = [];
-
         if(!empty($data->customers)){
             foreach ($data->customers as $item){
                 $sendsms_customer_join = SendsmsCustomerJoin::create([
                     "sendsms_id" => $sendsms->id,
                     "customer_id" => $item->id
                 ]);
-
-                $data_customers_id[] = $item->id;
             }
         }
 
-        $data_customers = Customer::whereIn('id', $data_customers_id)->get();
+        if($data->active_send === true){
+            $send_sms = $this->sendSms($data, $sendsms->id);
 
-        // $data_phones = [];
-        // $data_date = [];
-
-        $send_log = [];
-
-        foreach ($data_customers as $item){
-            $time = 0;
-            $phone = $item->phone;
-            $message = str_replace('{name}', $item->name, $data->message);
-
-            if($data->type == 'reg'){
-                $curr_year = date('Y');
-                $date_birth = date('d.m.' . $curr_year , strtotime($item->date));
-                $time_param = $date_birth . $data->time;
-
-                if($data->count_days > 0) $time_param .= '-' . $data->count_days . ' days';
-
-                $time = date('d.m.y H:i', strtotime($time_param));
+            if($send_sms['status'] === 'error'){
+                return ['status' => 'error'];
+            }else{
+                return ['sendsms' => $sendsms, 'send_log' => $send_sms['send_log'], 'status' => 'success'];
             }
-
-            $send = send_sms($phone, $message,0, $time);
-
-            if(isset($send[0])){
-                $sendsms_stat = SendsmsStat::create([
-                    'sendsms_id' => $sendsms->id,
-                    'sms_id' => $send[0]
-                ]);
-                $send_log[] = $send;
-            }
-
+        }else{
+            return ['sendsms' => $sendsms, 'status' => 'success'];
         }
-
-        return ['sendsms' => $sendsms, 'status' => 'success', 'send_log' => $send_log];
 
     }
 
@@ -232,7 +185,18 @@ class SendsmsController extends Controller
             $sendsms->save();
         }
 
-        return ['sendsms' => $sendsms, 'status' => 'success'];
+        if($data->active_send === true){
+            $send_sms = $this->sendSms($data, $sendsms->id);
+
+            if($send_sms['status'] === 'error'){
+                return ['status' => 'error'];
+            }else{
+                return ['sendsms' => $sendsms, 'send_log' => $send_sms['send_log'], 'status' => 'success'];
+            }
+        }else{
+            return ['sendsms' => $sendsms, 'status' => 'success'];
+        }
+
     }
 
     /**
@@ -240,20 +204,57 @@ class SendsmsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $sendsms = Sendsms::find($id);
+        if($sendsms) {
+            $sendsms->delete();
+            return ["status" => "success"];
+        }else{
+            return ["status" => "error"];
+        }
     }
 
-    public function sendSms(Request $request)
+    public function sendSms($data, $sendsms_id)
     {
-        $phone = '+79655594878';
-        $mess = 'Hello!';
+        date_default_timezone_set("Europe/Moscow");
 
-        $data = json_decode($request->check_customers);
+        $sendsms_customer_join = SendsmsCustomerJoin::where('sendsms_id', $sendsms_id)->get();
+        $data_customers_id = [];
 
-        $customers = Customer::whereIn('id', $data)->get();
+        foreach ($sendsms_customer_join as $item){
+            $data_customers_id[] = $item->customer_id;
+        }
 
-        // $send = send_sms($phone, $mess);
+        $data_customers = Customer::whereIn('id', $data_customers_id)->get();
 
-        return ['smsc' => $customers];
+        $send_log = [];
+
+        foreach ($data_customers as $item){
+            $time = 0;
+            $phone = $item->phone;
+            $message = str_replace('{name}', $item->name, $data->message);
+
+            if($data->type == 'reg'){
+                $curr_year = date('Y');
+                $date_birth = date('d.m.' . $curr_year , strtotime($item->date));
+                $time_param = $date_birth . $data->time;
+
+                if($data->count_days > 0) $time_param .= '-' . $data->count_days . ' days';
+
+                $time = date('d.m.y H:i', strtotime($time_param));
+            }
+
+            $send = send_sms($phone, $message,0, $time);
+
+            if(isset($send[0])){
+                $sendsms_stat = SendsmsStat::create([
+                    'sendsms_id' => $sendsms_id,
+                    'sms_id' => $send[0]
+                ]);
+                $send_log[] = $send;
+            }
+
+        }
+
+        return ['status' => 'success', 'send_log' => $send_log];
     }
 }

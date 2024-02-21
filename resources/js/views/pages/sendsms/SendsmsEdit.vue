@@ -5,6 +5,7 @@
             <h4 class="m-0" v-else>Создать рассылку</h4>
             <div class="badge bg-label-success mt-2 ms-3" v-if="badge.success">Успешно сохранено</div>
             <div class="badge bg-label-danger mt-2 ms-3" v-if="badge.error">Ошибка</div>
+            <div class="ms-3" v-if="badge.info">: {{ badge.info }}</div>
         </div>
         <div class="card">
             <div class="card-body">
@@ -57,9 +58,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <button class="btn rounded-pill btn-primary" @click.prevent="update(route.params.id)" v-if="editMode">Сохранить</button>
-                        <button class="btn rounded-pill btn-primary" @click.prevent="sendSms" v-else>Сохранить</button>
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="activeSendSms" @change="activeSendsms = !activeSendsms">
+                        <label class="form-check-label" for="activeSendSms">Запуск отправки SMS</label>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <div v-if="editMode">
+                            <button class="btn rounded-pill btn-success" @click.prevent="update(route.params.id)" v-if="activeSendsms">Сохранить и отправить</button>
+                            <button class="btn rounded-pill btn-primary" @click.prevent="update(route.params.id)" v-else>Сохранить</button>
+                        </div>
+                        <div v-else>
+                            <button class="btn rounded-pill btn-success" @click.prevent="store" v-if="activeSendsms">Сохранить и отправить</button>
+                            <button class="btn rounded-pill btn-primary" @click.prevent="store" v-else>Сохранить</button>
+                        </div>
                         <RouterLink to="/sendsms" class="btn rounded-pill btn-outline-secondary ms-4">Назад</RouterLink>
                     </div>
                 </form>
@@ -86,9 +97,11 @@ const typeSendsms = ref('');
 const timeSendsms = ref('00:00');
 const countDays = ref(0);
 const editMode = ref(false);
+const activeSendsms = ref(false);
 const badge = ref({
     success: false,
-    error: false
+    error: false,
+    info: ""
 });
 
 // mounted
@@ -111,7 +124,7 @@ function getCheckItems(items) {
     if(items.value) arrCustomers = items.value;
 }
 
-function sendSms() {
+function store() {
 
     let arrCustomersData = [];
     if(!arrCustomers.value) arrCustomersData = arrCustomers;
@@ -123,7 +136,8 @@ function sendSms() {
         time: timeSendsms.value,
         customers: arrCustomersData,
         type: typeSendsms.value,
-        count_days: countDays.value
+        count_days: countDays.value,
+        active_send: activeSendsms.value
     });
 
     formData.append('data', jsonData);
@@ -140,7 +154,7 @@ function sendSms() {
     })
 }
 
-function edit(id){
+function edit(id) {
     if(id) {
         axios.get('/api/sendsms_edit/' + id).then( resp => {
             if(resp.data.sendsms.length !== 0){
@@ -173,7 +187,8 @@ function update(id) {
             time: timeSendsms.value,
             customers: arrCustomersData,
             type: typeSendsms.value,
-            count_days: countDays.value
+            count_days: countDays.value,
+            active_send: activeSendsms.value
         });
 
         formData.append('data', jsonData);
