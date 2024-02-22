@@ -7,7 +7,14 @@ export default defineConfig({
     plugins: [
         vue(),
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js', 'resources/fonts/boxicons.scss'],
+            input: [
+                'resources/css/app.css',
+                'resources/css/core.css',
+                'resources/css/page-auth.css',
+                'resources/css/theme-default.css',
+                'resources/js/app.js',
+                'resources/fonts/boxicons.scss'
+            ],
             refresh: true,
         }),
     ],
