@@ -1,0 +1,177 @@
+{
+  "_index-L9GtX3dQ.js": {
+    "file": "assets/index-L9GtX3dQ.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-P_P964If.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/fonts/boxicons.scss": {
+    "file": "assets/boxicons-22y39gyc.css",
+    "isEntry": true,
+    "src": "resources/fonts/boxicons.scss"
+  },
+  "resources/images/avatars/1.png": {
+    "file": "assets/1-y9QEUTh0.png",
+    "src": "resources/images/avatars/1.png"
+  },
+  "resources/images/avatars/5.png": {
+    "file": "assets/5-dtR3Ke_v.png",
+    "src": "resources/images/avatars/5.png"
+  },
+  "resources/images/avatars/6.png": {
+    "file": "assets/6-7tLYvL2K.png",
+    "src": "resources/images/avatars/6.png"
+  },
+  "resources/images/avatars/7.png": {
+    "file": "assets/7-ZRg325jf.png",
+    "src": "resources/images/avatars/7.png"
+  },
+  "resources/images/avatars/avatar-1.png": {
+    "file": "assets/avatar-1-sTigs3cJ.png",
+    "src": "resources/images/avatars/avatar-1.png"
+  },
+  "resources/images/favicon/favicon.ico": {
+    "file": "assets/favicon-LwGg9ytj.ico",
+    "src": "resources/images/favicon/favicon.ico"
+  },
+  "resources/images/icons/brands/asana.png": {
+    "file": "assets/asana-qo5rqPTI.png",
+    "src": "resources/images/icons/brands/asana.png"
+  },
+  "resources/images/icons/brands/behance.png": {
+    "file": "assets/behance-jP9k1rn6.png",
+    "src": "resources/images/icons/brands/behance.png"
+  },
+  "resources/images/icons/brands/dribbble.png": {
+    "file": "assets/dribbble-x1DA0ABm.png",
+    "src": "resources/images/icons/brands/dribbble.png"
+  },
+  "resources/images/icons/brands/facebook.png": {
+    "file": "assets/facebook-HuLr5Vga.png",
+    "src": "resources/images/icons/brands/facebook.png"
+  },
+  "resources/images/icons/brands/github.png": {
+    "file": "assets/github-Vw6D6KCG.png",
+    "src": "resources/images/icons/brands/github.png"
+  },
+  "resources/images/icons/brands/google.png": {
+    "file": "assets/google-h8G483KH.png",
+    "src": "resources/images/icons/brands/google.png"
+  },
+  "resources/images/icons/brands/instagram.png": {
+    "file": "assets/instagram-6KgFmJLa.png",
+    "src": "resources/images/icons/brands/instagram.png"
+  },
+  "resources/images/icons/brands/mailchimp.png": {
+    "file": "assets/mailchimp-oKLa974H.png",
+    "src": "resources/images/icons/brands/mailchimp.png"
+  },
+  "resources/images/icons/brands/slack.png": {
+    "file": "assets/slack-qjB3Ei2m.png",
+    "src": "resources/images/icons/brands/slack.png"
+  },
+  "resources/images/icons/brands/twitter.png": {
+    "file": "assets/twitter-1yZBS3uo.png",
+    "src": "resources/images/icons/brands/twitter.png"
+  },
+  "resources/images/icons/unicons/cc-primary.png": {
+    "file": "assets/cc-primary-g-P9-J_E.png",
+    "src": "resources/images/icons/unicons/cc-primary.png"
+  },
+  "resources/images/icons/unicons/cc-success.png": {
+    "file": "assets/cc-success-Sb5kJMQ9.png",
+    "src": "resources/images/icons/unicons/cc-success.png"
+  },
+  "resources/images/icons/unicons/cc-warning.png": {
+    "file": "assets/cc-warning-AHwPTLXs.png",
+    "src": "resources/images/icons/unicons/cc-warning.png"
+  },
+  "resources/images/icons/unicons/chart-success.png": {
+    "file": "assets/chart-success-pqeo97Fx.png",
+    "src": "resources/images/icons/unicons/chart-success.png"
+  },
+  "resources/images/icons/unicons/chart.png": {
+    "file": "assets/chart-pTKzmnaL.png",
+    "src": "resources/images/icons/unicons/chart.png"
+  },
+  "resources/images/icons/unicons/paypal.png": {
+    "file": "assets/paypal-1hIEWbno.png",
+    "src": "resources/images/icons/unicons/paypal.png"
+  },
+  "resources/images/icons/unicons/wallet-info.png": {
+    "file": "assets/wallet-info-MtAVKyD2.png",
+    "src": "resources/images/icons/unicons/wallet-info.png"
+  },
+  "resources/images/icons/unicons/wallet.png": {
+    "file": "assets/wallet--Tc2IycW.png",
+    "src": "resources/images/icons/unicons/wallet.png"
+  },
+  "resources/images/logo/daily-grow-icon.svg": {
+    "file": "assets/daily-grow-icon--e0-jPtR.svg",
+    "src": "resources/images/logo/daily-grow-icon.svg"
+  },
+  "resources/js/app.js": {
+    "dynamicImports": [
+      "resources/js/views/pages/dashboard/Dashboard.vue",
+      "resources/js/views/pages/customers/Customers.vue",
+      "resources/js/views/pages/sendsms/Sendsms.vue",
+      "resources/js/views/pages/sendsms/SendsmsEdit.vue",
+      "resources/js/views/pages/sendsms/SendsmsEdit.vue",
+      "resources/js/views/pages/customers/CustomersEdit.vue",
+      "resources/js/views/pages/customers/CustomersEdit.vue"
+    ],
+    "file": "assets/app-DSpamfmE.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/views/pages/customers/Customers.vue": {
+    "file": "assets/Customers-MLYDQBdQ.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index-L9GtX3dQ.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/views/pages/customers/Customers.vue"
+  },
+  "resources/js/views/pages/customers/CustomersEdit.vue": {
+    "file": "assets/CustomersEdit-Y1pq9jLe.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/views/pages/customers/CustomersEdit.vue"
+  },
+  "resources/js/views/pages/dashboard/Dashboard.vue": {
+    "file": "assets/Dashboard-T6gwlNs1.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/views/pages/dashboard/Dashboard.vue"
+  },
+  "resources/js/views/pages/sendsms/Sendsms.vue": {
+    "file": "assets/Sendsms-NxqC7DDs.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index-L9GtX3dQ.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/views/pages/sendsms/Sendsms.vue"
+  },
+  "resources/js/views/pages/sendsms/SendsmsEdit.vue": {
+    "css": [
+      "assets/SendsmsEdit-P9rzR6vJ.css"
+    ],
+    "file": "assets/SendsmsEdit-G4767vrg.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/views/pages/sendsms/SendsmsEdit.vue"
+  }
+}
