@@ -111,8 +111,6 @@ class SendsmsController extends Controller
             return ['status' => 'error', 'info' => 'Поля "Название" и "Текст" обязательны'];
         }
 
-        // return ['sendsms' => $data->customers];
-
         $sendsms = Sendsms::create([
             "name" => $data->name,
             "message" => $data->message,
